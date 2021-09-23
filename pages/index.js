@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { supabase } from "lib/Store";
 import { initialWatermelonDbSync } from "store/sync";
+import UserContext from "lib/UserContext";
 
 const Home = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { watermelonDb } = useContext(UserContext);
 
   const handleLogin = async (type, username, password) => {
     try {
@@ -20,7 +22,8 @@ const Home = () => {
       } else if (!user) {
         alert("Signup successful, confirmation mail should be sent soon!");
       } else {
-        await initialWatermelonDbSync();
+        // initial db on login successfully
+        await initialWatermelonDbSync(watermelonDb);
       }
     } catch (error) {
       console.log("error", error);

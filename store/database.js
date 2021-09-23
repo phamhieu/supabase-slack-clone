@@ -1,4 +1,3 @@
-import { Database } from "@nozbe/watermelondb";
 import LokiJSAdapter from "@nozbe/watermelondb/adapters/lokijs";
 import schema from "model/schema";
 import migrations from "model/migrations";
@@ -16,10 +15,7 @@ const adapter = new LokiJSAdapter({
   useIncrementalIndexedDB: true,
 });
 
-// Then, make a Watermelon database from it!
-const watermelonDb = new Database({
+export const databaseConfig = {
   adapter,
   modelClasses: [Channel, Message, RolePermission, User, UserRole],
-});
-
-export default watermelonDb;
+};

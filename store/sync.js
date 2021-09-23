@@ -1,11 +1,12 @@
 import SyncLogger from "@nozbe/watermelondb/sync/SyncLogger";
-import watermelonDb from "./database";
 import { synchronize } from "@nozbe/watermelondb/sync";
 import { supabase } from "lib/Store";
 
 const logger = new SyncLogger(10 /* limit of sync logs to keep in memory */);
 
-export async function initialWatermelonDbSync() {
+export async function initialWatermelonDbSync(watermelonDb) {
+  if (!watermelonDb) return;
+
   await synchronize({
     database: watermelonDb,
     log: logger.newLog(),

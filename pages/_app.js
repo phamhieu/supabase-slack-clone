@@ -2,7 +2,11 @@ import "~/styles/style.scss";
 import React, { useState, useEffect } from "react";
 import Router from "next/router";
 import UserContext from "lib/UserContext";
+import { Database } from "@nozbe/watermelondb";
 import { supabase, fetchUserRoles } from "lib/Store";
+import { databaseConfig } from "store/database";
+
+const watermelonDb = new Database(databaseConfig);
 
 export default function SupabaseSlackClone({ Component, pageProps }) {
   const [userLoaded, setUserLoaded] = useState(false);
@@ -45,7 +49,15 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
   };
 
   const signOut = async () => {
-    const result = await supabase.auth.signOut();
+    await supabase.auth.signOut();
+
+    try {
+      // reset db on logout
+      await watermelonDb.write(() => watermelonDb.unsafeResetDatabase());
+    } catch (e) {
+      console.log(e);
+    }
+
     Router.push("/");
   };
 
@@ -55,6 +67,7 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
         userLoaded,
         user,
         userRoles,
+        watermelonDb,
         signIn,
         signOut,
       }}
