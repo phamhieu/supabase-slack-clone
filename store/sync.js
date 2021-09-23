@@ -1,8 +1,14 @@
+import SyncLogger from "@nozbe/watermelondb/sync/SyncLogger";
+import watermelonDb from "./database";
 import { synchronize } from "@nozbe/watermelondb/sync";
+import { supabase } from "lib/Store";
 
-async function watermelonDbSync() {
+const logger = new SyncLogger(10 /* limit of sync logs to keep in memory */);
+
+export async function initialWatermelonDbSync() {
   await synchronize({
-    database,
+    database: watermelonDb,
+    log: logger.newLog(),
     pullChanges: async ({ lastPulledAt, schemaVersion, migration }) => {
       console.log(
         "pullChanges: ",
@@ -27,19 +33,26 @@ async function watermelonDbSync() {
         .select("*");
 
       const changes = {
-        channels,
-        messages,
-        role_permissions,
-        users,
-        user_roles,
+        channels: { created: channels, updated: [], deleted: [] },
+        messages: { created: messages, updated: [], deleted: [] },
+        role_permissions: {
+          created: role_permissions,
+          updated: [],
+          deleted: [],
+        },
+        users: { created: users, updated: [], deleted: [] },
+        user_roles: { created: user_roles, updated: [], deleted: [] },
       };
       const timestamp = Date.now();
+      console.log("pullChanges completes: ", timestamp, changes);
       return { changes, timestamp };
     },
     pushChanges: async ({ changes, lastPulledAt }) => {
       console.log("pushChanges: ", changes, " lastPulledAt: ", lastPulledAt);
-      throw new Error("not implemented");
+      // throw new Error("not implemented");
     },
     migrationsEnabledAtVersion: 1,
   });
+
+  console.log(logger.formattedLogs);
 }

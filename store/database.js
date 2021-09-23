@@ -17,7 +17,9 @@ const adapter = new LokiJSAdapter({
 });
 
 // Then, make a Watermelon database from it!
-export const database = new Database({
+const watermelonDb = new Database({
   adapter,
   modelClasses: [Channel, Message, RolePermission, User, UserRole],
 });
+
+export default watermelonDb;
