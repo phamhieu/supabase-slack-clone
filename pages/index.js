@@ -6,7 +6,7 @@ import { initialWatermelonDbSync } from "store/sync";
 const Home = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { watermelonDb } = useDatabase();
+  const database = useDatabase();
 
   const handleLogin = async (type, username, password) => {
     try {
@@ -23,7 +23,7 @@ const Home = () => {
         alert("Signup successful, confirmation mail should be sent soon!");
       } else {
         // initial db on login successfully
-        await initialWatermelonDbSync(watermelonDb);
+        await initialWatermelonDbSync(database);
       }
     } catch (error) {
       console.log("error", error);
