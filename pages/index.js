@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDatabase } from "@nozbe/watermelondb/hooks";
 import { supabase } from "lib/Store";
-import { initialWatermelonDbSync } from "store/sync";
+import { watermelonDbSync } from "store/sync";
 
 const Home = () => {
   const [username, setUsername] = useState("");
@@ -23,7 +23,7 @@ const Home = () => {
         alert("Signup successful, confirmation mail should be sent soon!");
       } else {
         // initial db on login successfully
-        await initialWatermelonDbSync(database);
+        await watermelonDbSync(database);
       }
     } catch (error) {
       console.log("error", error);
