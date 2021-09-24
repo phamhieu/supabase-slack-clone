@@ -1,5 +1,6 @@
 import "~/styles/style.scss";
 import React, { useState, useEffect } from "react";
+import DatabaseProvider from "@nozbe/watermelondb/DatabaseProvider";
 import { useRouter } from "next/router";
 import UserContext from "lib/UserContext";
 import { Database } from "@nozbe/watermelondb";
@@ -51,15 +52,16 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
   };
 
   return (
-    <UserContext.Provider
-      value={{
-        userLoaded,
-        user,
-        watermelonDb,
-        signOut,
-      }}
-    >
-      <Component {...pageProps} />
-    </UserContext.Provider>
+    <DatabaseProvider database={watermelonDb}>
+      <UserContext.Provider
+        value={{
+          userLoaded,
+          user,
+          signOut,
+        }}
+      >
+        <Component {...pageProps} />
+      </UserContext.Provider>
+    </DatabaseProvider>
   );
 }

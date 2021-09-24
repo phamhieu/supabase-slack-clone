@@ -1,12 +1,12 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
+import { useDatabase } from "@nozbe/watermelondb/hooks";
 import { supabase } from "lib/Store";
 import { initialWatermelonDbSync } from "store/sync";
-import UserContext from "lib/UserContext";
 
 const Home = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { watermelonDb } = useContext(UserContext);
+  const { watermelonDb } = useDatabase();
 
   const handleLogin = async (type, username, password) => {
     try {
