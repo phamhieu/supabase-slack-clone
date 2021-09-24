@@ -15,7 +15,8 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "sass": "^1.26.2",
-    "tailwindcss": "^1.1.4"
+    "tailwindcss": "^1.1.4",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.14.5",
