@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 const MessageInput = ({ onSubmit }) => {
-  const [messageText, setMessageText] = useState('')
+  const [messageText, setMessageText] = useState("");
 
   const submitOnEnter = (event) => {
     // Watch for enter key
     if (event.keyCode === 13) {
-      onSubmit(messageText)
-      setMessageText('')
+      onSubmit(messageText);
+      setMessageText("");
     }
-  }
+  };
 
   return (
     <>
@@ -22,7 +22,7 @@ const MessageInput = ({ onSubmit }) => {
         onKeyDown={(e) => submitOnEnter(e)}
       />
     </>
-  )
-}
+  );
+};
 
-export default MessageInput
+export default MessageInput;

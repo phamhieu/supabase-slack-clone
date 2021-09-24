@@ -1,36 +1,36 @@
-import Link from 'next/link'
-import { useContext } from 'react'
-import UserContext from '~/lib/UserContext'
-import { addChannel, deleteChannel } from '~/lib/Store'
-import TrashIcon from '~/components/TrashIcon'
+import Link from "next/link";
+import { useContext } from "react";
+import UserContext from "~/lib/UserContext";
+import { addChannel, deleteChannel } from "~/lib/Store";
+import TrashIcon from "~/components/TrashIcon";
 
 export default function Layout(props) {
-  const { signOut, user, userRoles } = useContext(UserContext)
+  const { signOut, user, userRoles } = useContext(UserContext);
 
   const slugify = (text) => {
     return text
       .toString()
       .toLowerCase()
-      .replace(/\s+/g, '-') // Replace spaces with -
-      .replace(/[^\w-]+/g, '') // Remove all non-word chars
-      .replace(/--+/g, '-') // Replace multiple - with single -
-      .replace(/^-+/, '') // Trim - from start of text
-      .replace(/-+$/, '') // Trim - from end of text
-  }
+      .replace(/\s+/g, "-") // Replace spaces with -
+      .replace(/[^\w-]+/g, "") // Remove all non-word chars
+      .replace(/--+/g, "-") // Replace multiple - with single -
+      .replace(/^-+/, "") // Trim - from start of text
+      .replace(/-+$/, ""); // Trim - from end of text
+  };
 
   const newChannel = async () => {
-    const slug = prompt('Please enter your name')
+    const slug = prompt("Please enter your name");
     if (slug) {
-      addChannel(slugify(slug), user.id)
+      addChannel(slugify(slug), user.id);
     }
-  }
+  };
 
   return (
     <main className="main flex h-screen w-screen overflow-hidden">
       {/* Sidebar */}
       <nav
         className="w-64 bg-gray-900 text-gray-100 overflow-scroll "
-        style={{ maxWidth: '20%', minWidth: 150, maxHeight: '100vh' }}
+        style={{ maxWidth: "20%", minWidth: 150, maxHeight: "100vh" }}
       >
         <div className="p-2 ">
           <div className="p-2">
@@ -70,20 +70,21 @@ export default function Layout(props) {
       {/* Messages */}
       <div className="flex-1 bg-gray-800 h-screen">{props.children}</div>
     </main>
-  )
+  );
 }
 
 const SidebarItem = ({ channel, isActiveChannel, user, userRoles }) => (
   <>
     <li className="flex items-center justify-between">
       <Link href="/channels/[id]" as={`/channels/${channel.id}`}>
-        <a className={isActiveChannel ? 'font-bold' : ''}>{channel.slug}</a>
+        <a className={isActiveChannel ? "font-bold" : ""}>{channel.slug}</a>
       </Link>
-      {channel.id !== 1 && (channel.created_by === user?.id || userRoles.includes('admin')) && (
-        <button onClick={() => deleteChannel(channel.id)}>
-          <TrashIcon />
-        </button>
-      )}
+      {channel.id !== 1 &&
+        (channel.created_by === user?.id || userRoles.includes("admin")) && (
+          <button onClick={() => deleteChannel(channel.id)}>
+            <TrashIcon />
+          </button>
+        )}
     </li>
   </>
-)
+);

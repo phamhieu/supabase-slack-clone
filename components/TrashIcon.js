@@ -1,5 +1,5 @@
 const TrashIcon = (props) => {
-  const { size = 16 } = props
+  const { size = 16 } = props;
 
   return (
     <svg
@@ -19,7 +19,7 @@ const TrashIcon = (props) => {
       <line x1="10" y1="11" x2="10" y2="17"></line>
       <line x1="14" y1="11" x2="14" y2="17"></line>
     </svg>
-  )
-}
+  );
+};
 
-export default TrashIcon
+export default TrashIcon;

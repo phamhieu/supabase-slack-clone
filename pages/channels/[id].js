@@ -1,33 +1,33 @@
-import Layout from '~/components/Layout'
-import Message from '~/components/Message'
-import MessageInput from '~/components/MessageInput'
-import { useRouter } from 'next/router'
-import { useStore, addMessage } from '~/lib/Store'
-import { useContext, useEffect, useRef } from 'react'
-import UserContext from '~/lib/UserContext'
+import Layout from "~/components/Layout";
+import Message from "~/components/Message";
+import MessageInput from "~/components/MessageInput";
+import { useRouter } from "next/router";
+import { useStore, addMessage } from "~/lib/Store";
+import { useContext, useEffect, useRef } from "react";
+import UserContext from "~/lib/UserContext";
 
 const ChannelsPage = (props) => {
-  const router = useRouter()
-  const { user, authLoaded, signOut } = useContext(UserContext)
-  const messagesEndRef = useRef(null)
+  const router = useRouter();
+  const { user } = useContext(UserContext);
+  const messagesEndRef = useRef(null);
 
   // Else load up the page
-  const { id: channelId } = router.query
-  const { messages, channels } = useStore({ channelId })
+  const { id: channelId } = router.query;
+  const { messages, channels } = useStore({ channelId });
 
   useEffect(() => {
     messagesEndRef.current.scrollIntoView({
-      block: 'start',
-      behavior: 'smooth',
-    })
-  }, [messages])
+      block: "start",
+      behavior: "smooth",
+    });
+  }, [messages]);
 
   // redirect to public channel when current channel is deleted
   useEffect(() => {
     if (!channels.some((channel) => channel.id === Number(channelId))) {
-      router.push('/channels/1')
+      router.push("/channels/1");
     }
-  }, [channels, channelId])
+  }, [channels, channelId]);
 
   // Render the channels and messages
   return (
@@ -42,11 +42,13 @@ const ChannelsPage = (props) => {
           </div>
         </div>
         <div className="p-2 absolute bottom-0 left-0 w-full">
-          <MessageInput onSubmit={async (text) => addMessage(text, channelId, user.id)} />
+          <MessageInput
+            onSubmit={async (text) => addMessage(text, channelId, user.id)}
+          />
         </div>
       </div>
     </Layout>
-  )
-}
+  );
+};
 
-export default ChannelsPage
+export default ChannelsPage;
