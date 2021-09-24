@@ -17,7 +17,7 @@ export default appSchema({
         { name: "message", type: "string" },
         { name: "inserted_at", type: "string" },
         { name: "user_id", type: "string" },
-        { name: "channel_id", type: "number" },
+        { name: "channel_id", type: "string" },
       ],
     }),
     tableSchema({

@@ -2,6 +2,7 @@
 // Do not edit manually.
 
 import {
+  children,
   date,
   field,
   text,
@@ -12,6 +13,7 @@ import { Model } from "@nozbe/watermelondb";
 export default class Channel extends Model {
   static table = "channels";
   static associations = {
+    messages: { type: "has_many", foreignKey: "channel_id" },
     users: { type: "belongs_to", key: "created_by" },
   };
 
@@ -20,4 +22,5 @@ export default class Channel extends Model {
   @field("created_by") created_by;
 
   @immutableRelation("users", "created_by") author;
+  @children("messages") messages;
 }

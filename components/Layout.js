@@ -1,11 +1,13 @@
 import Link from "next/link";
+import withObservables from "@nozbe/with-observables";
 import { useContext } from "react";
-import UserContext from "~/lib/UserContext";
-import { addChannel, deleteChannel } from "~/lib/Store";
-import TrashIcon from "~/components/TrashIcon";
+import UserContext from "lib/UserContext";
+import { addChannel, deleteChannel } from "lib/Store";
+import TrashIcon from "components/TrashIcon";
 
-export default function Layout(props) {
-  const { signOut, user, userRoles } = useContext(UserContext);
+export default function Layout({ channels, activeChannelId, children }) {
+  const { signOut, user } = useContext(UserContext);
+  const userRoles = [];
 
   const slugify = (text) => {
     return text
@@ -54,11 +56,11 @@ export default function Layout(props) {
           <hr className="m-2" />
           <h4 className="font-bold">Channels</h4>
           <ul className="channel-list">
-            {props.channels.map((x) => (
-              <SidebarItem
+            {channels.map((x) => (
+              <EnhancedChannelMenuItem
                 channel={x}
                 key={x.id}
-                isActiveChannel={x.id === props.activeChannelId}
+                isActiveChannel={x.id === activeChannelId}
                 user={user}
                 userRoles={userRoles}
               />
@@ -68,12 +70,12 @@ export default function Layout(props) {
       </nav>
 
       {/* Messages */}
-      <div className="flex-1 bg-gray-800 h-screen">{props.children}</div>
+      <div className="flex-1 bg-gray-800 h-screen">{children}</div>
     </main>
   );
 }
 
-const SidebarItem = ({ channel, isActiveChannel, user, userRoles }) => (
+const ChannelMenuItem = ({ channel, isActiveChannel, user, userRoles }) => (
   <>
     <li className="flex items-center justify-between">
       <Link href="/channels/[id]" as={`/channels/${channel.id}`}>
@@ -88,3 +90,8 @@ const SidebarItem = ({ channel, isActiveChannel, user, userRoles }) => (
     </li>
   </>
 );
+
+const enhance = withObservables(["channel"], ({ channel }) => ({
+  channel,
+}));
+const EnhancedChannelMenuItem = enhance(ChannelMenuItem);

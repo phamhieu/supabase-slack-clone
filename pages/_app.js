@@ -19,7 +19,7 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
     setUser(session?.user ?? null);
     setUserLoaded(session ? true : false);
     if (user) {
-      router.push("/channels/1");
+      router.push("/channels");
     }
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -28,7 +28,7 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
         setUser(currentUser ?? null);
         setUserLoaded(!!currentUser);
         if (currentUser) {
-          router.push("/channels/1");
+          router.push("/channels");
         }
       }
     );

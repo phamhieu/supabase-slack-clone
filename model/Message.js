@@ -13,6 +13,7 @@ export default class Message extends Model {
   static table = "messages";
   static associations = {
     users: { type: "belongs_to", key: "user_id" },
+    channels: { type: "belongs_to", key: "channel_id" },
   };
 
   @text("message") message;

@@ -4,11 +4,11 @@ import { supabase } from "lib/Store";
 
 const logger = new SyncLogger(10 /* limit of sync logs to keep in memory */);
 
-export async function initialWatermelonDbSync(watermelonDb) {
-  if (!watermelonDb) return;
+export async function initialWatermelonDbSync(database) {
+  if (!database) return;
 
   await synchronize({
-    database: watermelonDb,
+    database,
     log: logger.newLog(),
     pullChanges: async ({ lastPulledAt, schemaVersion, migration }) => {
       console.log(
