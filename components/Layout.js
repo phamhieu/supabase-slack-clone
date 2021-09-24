@@ -1,12 +1,16 @@
 import Link from "next/link";
 import withObservables from "@nozbe/with-observables";
+import { useDatabase } from "@nozbe/watermelondb/hooks";
+import { useRouter } from "next/router";
 import { useContext } from "react";
+import { deleteChannel } from "lib/Store";
 import UserContext from "lib/UserContext";
-import { addChannel, deleteChannel } from "lib/Store";
 import TrashIcon from "components/TrashIcon";
 
 export default function Layout({ channels, activeChannelId, children }) {
   const { signOut, user } = useContext(UserContext);
+  const database = useDatabase();
+  const router = useRouter();
   const userRoles = [];
 
   const slugify = (text) => {
@@ -21,9 +25,15 @@ export default function Layout({ channels, activeChannelId, children }) {
   };
 
   const newChannel = async () => {
-    const slug = prompt("Please enter your name");
+    const slug = prompt("Please enter channel name");
     if (slug) {
-      addChannel(slugify(slug), user.id);
+      const newChannel = await database.write(() =>
+        database.get("channels").create((channel) => {
+          channel.slug = slugify(slug);
+          channel.created_by = user.if;
+        })
+      );
+      router.push(`/channels/${newChannel.id}`);
     }
   };
 
