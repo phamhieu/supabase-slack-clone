@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Router from "next/router";
 import UserContext from "lib/UserContext";
 import { Database } from "@nozbe/watermelondb";
-import { supabase, fetchUserRoles } from "lib/Store";
+import { supabase } from "lib/Store";
 import { databaseConfig } from "store/database";
 
 const watermelonDb = new Database(databaseConfig);
@@ -11,8 +11,6 @@ const watermelonDb = new Database(databaseConfig);
 export default function SupabaseSlackClone({ Component, pageProps }) {
   const [userLoaded, setUserLoaded] = useState(false);
   const [user, setUser] = useState(null);
-  const [session, setSession] = useState(null);
-  const [userRoles, setUserRoles] = useState([]);
 
   useEffect(() => {
     const session = supabase.auth.session();
@@ -20,7 +18,6 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
     setUser(session?.user ?? null);
     setUserLoaded(session ? true : false);
     if (user) {
-      signIn();
       Router.push("/channels/[id]", "/channels/1");
     }
 
@@ -31,7 +28,6 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
         setUser(currentUser ?? null);
         setUserLoaded(!!currentUser);
         if (currentUser) {
-          signIn(currentUser.id, currentUser.email);
           Router.push("/channels/[id]", "/channels/1");
         }
       }
@@ -41,12 +37,6 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
       authListener.unsubscribe();
     };
   }, [user]);
-
-  const signIn = async () => {
-    await fetchUserRoles((userRoles) =>
-      setUserRoles(userRoles.map((userRole) => userRole.role))
-    );
-  };
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -66,7 +56,6 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
       value={{
         userLoaded,
         user,
-        userRoles,
         watermelonDb,
         signIn,
         signOut,
