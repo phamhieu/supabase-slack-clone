@@ -1,7 +1,12 @@
 // Auto-generated.
 // Do not edit manually.
 
-import { date, field, text } from "@nozbe/watermelondb/decorators";
+import {
+  date,
+  field,
+  text,
+  immutableRelation,
+} from "@nozbe/watermelondb/decorators";
 import { Model } from "@nozbe/watermelondb";
 
 export default class Channel extends Model {
