@@ -14,7 +14,6 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
 
   useEffect(() => {
     const session = supabase.auth.session();
-    setSession(session);
     setUser(session?.user ?? null);
     setUserLoaded(session ? true : false);
     if (user) {
@@ -23,7 +22,6 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        setSession(session);
         const currentUser = session?.user;
         setUser(currentUser ?? null);
         setUserLoaded(!!currentUser);
@@ -57,7 +55,6 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
         userLoaded,
         user,
         watermelonDb,
-        signIn,
         signOut,
       }}
     >
