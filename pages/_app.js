@@ -1,6 +1,6 @@
 import "~/styles/style.scss";
 import React, { useState, useEffect } from "react";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import UserContext from "lib/UserContext";
 import { Database } from "@nozbe/watermelondb";
 import { supabase } from "lib/Store";
@@ -11,13 +11,14 @@ const watermelonDb = new Database(databaseConfig);
 export default function SupabaseSlackClone({ Component, pageProps }) {
   const [userLoaded, setUserLoaded] = useState(false);
   const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const session = supabase.auth.session();
     setUser(session?.user ?? null);
     setUserLoaded(session ? true : false);
     if (user) {
-      Router.push("/channels/[id]", "/channels/1");
+      router.push("/channels/1");
     }
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -26,7 +27,7 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
         setUser(currentUser ?? null);
         setUserLoaded(!!currentUser);
         if (currentUser) {
-          Router.push("/channels/[id]", "/channels/1");
+          router.push("/channels/1");
         }
       }
     );
@@ -46,7 +47,7 @@ export default function SupabaseSlackClone({ Component, pageProps }) {
       console.log(e);
     }
 
-    Router.push("/");
+    router.push("/");
   };
 
   return (
