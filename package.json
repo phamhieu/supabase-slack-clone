@@ -14,6 +14,7 @@
     "next": "latest",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "recompose": "^0.30.0",
     "sass": "^1.26.2",
     "tailwindcss": "^1.1.4",
     "uuid": "^8.3.2"
