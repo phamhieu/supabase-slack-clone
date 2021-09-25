@@ -1,11 +1,13 @@
+import { useContext } from "react";
+import { useRouter } from "next/router";
 import { withDatabase } from "@nozbe/watermelondb/DatabaseProvider";
+import { useDatabase } from "@nozbe/watermelondb/hooks";
 import { compose } from "recompose";
 import withObservables from "@nozbe/with-observables";
 import Layout from "~/components/Layout";
 import MessageList from "~/components/MessageList";
 import MessageInput from "~/components/MessageInput";
-import { useRouter } from "next/router";
-import { addMessage } from "~/lib/Store";
+import UserContext from "lib/UserContext";
 
 const ChannelDetailPage = ({ channels }) => {
   const router = useRouter();
@@ -26,14 +28,25 @@ export default compose(
   }))
 )(ChannelDetailPage);
 
-const Channel = ({ channelId, channel }) => {
-  console.log("Channel: ", channelId, channel);
+const Channel = ({ channel }) => {
+  const { user } = useContext(UserContext);
+  const database = useDatabase();
+
   return (
     <div className="relative h-screen">
       <MessageList channel={channel} />
       <div className="p-2 absolute bottom-0 left-0 w-full">
         <MessageInput
-          onSubmit={async (text) => addMessage(text, channelId, user.id)}
+          onSubmit={(text) => {
+            database.write(() =>
+              database.get("messages").create((message) => {
+                message.message = text;
+                message.channelId = channel.id;
+                message.userId = user.id;
+                message.insertedAt = Date.now();
+              })
+            );
+          }}
         />
       </div>
     </div>
