@@ -1,6 +1,3 @@
-// Auto-generated.
-// Do not edit manually.
-
 import {
   children,
   date,
@@ -17,10 +14,15 @@ export default class Channel extends Model {
     users: { type: "belongs_to", key: "created_by" },
   };
 
+  @field("created_by") created_by;
   @date("inserted_at") insertedAt;
   @text("slug") slug;
-  @field("created_by") created_by;
 
   @immutableRelation("users", "created_by") author;
   @children("messages") messages;
+
+  async markAsDeleted() {
+    await this.messages.destroyAllPermanently();
+    await super.markAsDeleted();
+  }
 }
