@@ -6,29 +6,15 @@ import MessageList from "~/components/MessageList";
 import MessageInput from "~/components/MessageInput";
 import { useRouter } from "next/router";
 import { addMessage } from "~/lib/Store";
-import { useContext } from "react";
-import UserContext from "~/lib/UserContext";
 
 const ChannelDetailPage = ({ channels }) => {
   const router = useRouter();
-  const { user } = useContext(UserContext);
-
-  console.log("channels: ", channels);
-
-  // Else load up the page
   const { id: channelId } = router.query;
-
-  // redirect to public channel when current channel is deleted
-  // useEffect(() => {
-  //   if (!channels.some((channel) => channel.id === Number(channelId))) {
-  //     // router.push("/channels/1");
-  //   }
-  // }, [channels, channelId]);
 
   // Render the channels and messages
   return (
     <Layout channels={channels} activeChannelId={channelId}>
-      <EnhanceChannel channelId={channelId} />
+      {channelId && <EnhanceChannel channelId={channelId} />}
     </Layout>
   );
 };
