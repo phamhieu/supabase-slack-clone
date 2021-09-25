@@ -30,6 +30,7 @@ export default function Layout({ channels, activeChannelId, children }) {
         database.get("channels").create((channel) => {
           channel.slug = slugify(slug);
           channel.created_by = user.id;
+          channel.insertedAt = Date.now();
         })
       );
       router.push(`/channels/${newChannel.id}`);
