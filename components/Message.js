@@ -1,19 +1,24 @@
 import { useContext } from "react";
+import { useDatabase } from "@nozbe/watermelondb/hooks";
 import withObservables from "@nozbe/with-observables";
-import UserContext from "~/lib/UserContext";
-import { deleteMessage } from "~/lib/Store";
-import TrashIcon from "~/components/TrashIcon";
+import UserContext from "lib/UserContext";
+import TrashIcon from "components/TrashIcon";
 
 const Message = ({ message, author }) => {
   const { user } = useContext(UserContext);
+  const database = useDatabase();
   const userRoles = [];
+
+  async function onDelete() {
+    await database.write(async () => message.destroyPermanently());
+  }
 
   return (
     <div className="py-1 flex items-center space-x-2">
       <div className="text-gray-100 w-4">
-        {(user?.id === message.user_id ||
+        {(user?.id === message.userId ||
           userRoles.some((role) => ["admin", "moderator"].includes(role))) && (
-          <button onClick={() => deleteMessage(message.id)}>
+          <button onClick={onDelete}>
             <TrashIcon />
           </button>
         )}
