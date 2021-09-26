@@ -3,7 +3,6 @@ import withObservables from "@nozbe/with-observables";
 import Message from "components/Message";
 
 const MessageList = ({ messages }) => {
-  console.log("MessageList: ", messages);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
