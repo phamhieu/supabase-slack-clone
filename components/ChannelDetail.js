@@ -11,22 +11,22 @@ const ChannelDetail = ({ channel }) => {
   const { user } = useContext(UserContext);
   const database = useDatabase();
 
+  function onCreateMessage(text) {
+    database.write(() =>
+      database.get("messages").create((message) => {
+        message.message = text;
+        message.channelId = channel.id;
+        message.userId = user.id;
+        message.insertedAt = Date.now();
+      })
+    );
+  }
+
   return (
     <div className="relative h-screen">
       <MessageList channel={channel} />
       <div className="p-2 absolute bottom-0 left-0 w-full">
-        <MessageInput
-          onSubmit={(text) => {
-            database.write(() =>
-              database.get("messages").create((message) => {
-                message.message = text;
-                message.channelId = channel.id;
-                message.userId = user.id;
-                message.insertedAt = Date.now();
-              })
-            );
-          }}
-        />
+        <MessageInput onSubmit={onCreateMessage} />
       </div>
     </div>
   );
