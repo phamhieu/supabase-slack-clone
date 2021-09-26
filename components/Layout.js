@@ -1,27 +1,14 @@
-import Link from "next/link";
-import withObservables from "@nozbe/with-observables";
 import { useDatabase } from "@nozbe/watermelondb/hooks";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import UserContext from "lib/UserContext";
-import TrashIcon from "components/TrashIcon";
+import ChannelMenuItem from "components/ChannelMenuItem";
 
 export default function Layout({ channels, activeChannelId, children }) {
   const { signOut, user } = useContext(UserContext);
   const database = useDatabase();
   const router = useRouter();
   const userRoles = [];
-
-  const slugify = (text) => {
-    return text
-      .toString()
-      .toLowerCase()
-      .replace(/\s+/g, "-") // Replace spaces with -
-      .replace(/[^\w-]+/g, "") // Remove all non-word chars
-      .replace(/--+/g, "-") // Replace multiple - with single -
-      .replace(/^-+/, "") // Trim - from start of text
-      .replace(/-+$/, ""); // Trim - from end of text
-  };
 
   const newChannel = async () => {
     const slug = prompt("Please enter channel name");
@@ -67,7 +54,7 @@ export default function Layout({ channels, activeChannelId, children }) {
           <h4 className="font-bold">Channels</h4>
           <ul className="channel-list">
             {channels.map((x) => (
-              <EnhancedChannelMenuItem
+              <ChannelMenuItem
                 channel={x}
                 key={x.id}
                 isActiveChannel={x.id === activeChannelId}
@@ -85,34 +72,13 @@ export default function Layout({ channels, activeChannelId, children }) {
   );
 }
 
-const ChannelMenuItem = ({ channel, isActiveChannel, user, userRoles }) => {
-  const database = useDatabase();
-  const router = useRouter();
-
-  return (
-    <li className="flex items-center justify-between">
-      <Link href="/channels/[id]" as={`/channels/${channel.id}`}>
-        <a className={isActiveChannel ? "font-bold" : ""}>{channel.slug}</a>
-      </Link>
-      {channel.id !== 1 &&
-        (channel.created_by === user?.id || userRoles.includes("admin")) && (
-          <button
-            onClick={async () => {
-              await database.write(async () => channel.markAsDeleted());
-              if (router.asPath.includes(channel.id)) {
-                // redirect to channels, if route is at deleted channel
-                router.push("/channels");
-              }
-            }}
-          >
-            <TrashIcon />
-          </button>
-        )}
-    </li>
-  );
-};
-
-const enhance = withObservables(["channel"], ({ channel }) => ({
-  channel,
-}));
-const EnhancedChannelMenuItem = enhance(ChannelMenuItem);
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w-]+/g, "") // Remove all non-word chars
+    .replace(/--+/g, "-") // Replace multiple - with single -
+    .replace(/^-+/, "") // Trim - from start of text
+    .replace(/-+$/, ""); // Trim - from end of text
+}
