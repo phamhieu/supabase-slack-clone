@@ -1,6 +1,5 @@
 import {
   children,
-  date,
   field,
   text,
   immutableRelation,
@@ -14,8 +13,8 @@ export default class Channel extends Model {
     users: { type: "belongs_to", key: "created_by" },
   };
 
-  @field("created_by") created_by;
-  @date("inserted_at") insertedAt;
+  @field("created_by") createdBy;
+  @field("inserted_at") insertedAt;
   @text("slug") slug;
 
   @immutableRelation("users", "created_by") author;

@@ -17,7 +17,7 @@ const ChannelDetail = ({ channel }) => {
         message.message = text;
         message.channelId = channel.id;
         message.userId = user.id;
-        message.insertedAt = Date.now();
+        message.insertedAt = new Date().toISOString();
       })
     );
   }

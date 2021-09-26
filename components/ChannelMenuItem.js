@@ -22,7 +22,7 @@ const ChannelMenuItem = ({ channel, isActiveChannel, user, userRoles }) => {
         <a className={isActiveChannel ? "font-bold" : ""}>{channel.slug}</a>
       </Link>
       {channel.id !== 1 &&
-        (channel.created_by === user?.id || userRoles.includes("admin")) && (
+        (channel.createdBy === user?.id || userRoles.includes("admin")) && (
           <button onClick={onDelete}>
             <TrashIcon />
           </button>

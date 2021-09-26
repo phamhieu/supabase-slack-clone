@@ -1,12 +1,7 @@
 // Auto-generated.
 // Do not edit manually.
 
-import {
-  field,
-  text,
-  date,
-  immutableRelation,
-} from "@nozbe/watermelondb/decorators";
+import { field, text, immutableRelation } from "@nozbe/watermelondb/decorators";
 import { Model } from "@nozbe/watermelondb";
 
 export default class Message extends Model {
@@ -17,7 +12,7 @@ export default class Message extends Model {
   };
 
   @text("message") message;
-  @date("inserted_at") insertedAt;
+  @field("inserted_at") insertedAt;
   @field("user_id") userId;
   @field("channel_id") channelId;
 
